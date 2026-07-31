@@ -1,0 +1,20 @@
+:root{--card:#fff;--bg:#f4f6f8;--accent:#2b7ae4;--danger:#e04b4b;--muted:#6b7280}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; margin:0; padding:24px; background:var(--bg); color:#111}
+h1{margin:0 0 16px}
+.board{display:flex;gap:12px;flex-wrap:wrap}
+.day{background:var(--card);border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:12px;flex:1 1 220px;min-width:220px;}
+.day h2{margin:0 0 8px;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+.day .list{list-style:none;padding:0;margin:0;min-height:60px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:8px;border-radius:6px;background:#fbfdff;margin-bottom:8px;border:1px solid #eef3ff}
+.time{font-weight:600;color:var(--accent);width:64px;cursor:pointer}
+.text{flex:1;outline:none;min-height:18px}
+.actions{display:flex;gap:6px;margin-left:6px}
+button{background:transparent;border:0;cursor:pointer;padding:6px;border-radius:6px}
+.btn-add{background:var(--accent);color:#fff;padding:6px 8px;border-radius:6px;font-weight:600}
+.btn-del{color:var(--danger)}
+.muted{color:var(--muted);font-size:13px}
+.inline-form{display:flex;gap:6px;margin-top:8px}
+.inline-form input[type="time"]{padding:6px;border-radius:6px;border:1px solid #dfe7f6}
+.inline-form input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #dfe7f6}
+.hidden{display:none}
+@media (max-width:800px){.board{flex-direction:column}}
