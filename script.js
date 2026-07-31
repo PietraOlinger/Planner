@@ -1,35 +1,42 @@
-let data = loadData();
+const STORAGE_KEY = 'planner-week';
+const days = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 
-  function loadData(){
-    try{
+(function () {
+  let data = loadData();
+
+  function loadData() {
+    try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return days.map(()=>[]);
+      if (!raw) return days.map(() => []);
       return JSON.parse(raw);
-    }catch(e){
+    } catch (e) {
       console.error('Erro ao carregar dados:', e);
-      return days.map(()=>[]);
+      return days.map(() => []);
     }
   }
 
-  function saveData(){
+  function saveData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
-  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
 
   const board = document.getElementById('board');
 
-  function render(){
+  function render() {
+    if (!board) return;
     board.innerHTML = '';
     days.forEach((dayName, idx) => {
       const col = document.createElement('div');
       col.className = 'day';
       const header = document.createElement('h2');
-      header.innerHTML = '<span>'+dayName+'</span>';
+      header.innerHTML = '<span>' + dayName + '</span>';
       const addBtn = document.createElement('button');
       addBtn.className = 'btn-add';
       addBtn.textContent = '+ Adicionar';
-      addBtn.onclick = ()=> showInlineForm(idx, col);
+      addBtn.onclick = () => showInlineForm(idx, col);
       header.appendChild(addBtn);
       col.appendChild(header);
 
@@ -44,18 +51,21 @@ let data = loadData();
         timeSpan.className = 'time';
         timeSpan.textContent = task.time || '--:--';
         timeSpan.title = 'Clique para editar a hora';
-        timeSpan.onclick = ()=> editTime(idx, task.id);
+        timeSpan.onclick = () => editTime(idx, task.id);
 
         const textSpan = document.createElement('div');
         textSpan.className = 'text';
         textSpan.contentEditable = true;
         textSpan.spellcheck = false;
         textSpan.innerText = task.text || '';
-        textSpan.addEventListener('blur', ()=> {
+        textSpan.addEventListener('blur', () => {
           updateTaskText(idx, task.id, textSpan.innerText.trim());
         });
-        textSpan.addEventListener('keydown', (e)=> {
-          if(e.key === 'Enter'){ e.preventDefault(); textSpan.blur(); }
+        textSpan.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            textSpan.blur();
+          }
         });
 
         const actions = document.createElement('div');
@@ -64,8 +74,10 @@ let data = loadData();
         delBtn.className = 'btn-del';
         delBtn.textContent = '✕';
         delBtn.title = 'Excluir';
-        delBtn.onclick = ()=> {
-          if(confirm('Excluir compromisso?')) { deleteTask(idx, task.id); }
+        delBtn.onclick = () => {
+          if (confirm('Excluir compromisso?')) {
+            deleteTask(idx, task.id);
+          }
         };
 
         actions.appendChild(delBtn);
@@ -81,8 +93,8 @@ let data = loadData();
     });
   }
 
-  function showInlineForm(dayIndex, container){
-    if(container.querySelector('.inline-form')) return;
+  function showInlineForm(dayIndex, container) {
+    if (container.querySelector('.inline-form')) return;
     const form = document.createElement('div');
     form.className = 'inline-form';
     const timeInput = document.createElement('input');
@@ -94,16 +106,20 @@ let data = loadData();
     const ok = document.createElement('button');
     ok.className = 'btn-add';
     ok.textContent = 'Salvar';
-    ok.onclick = ()=>{
+    ok.onclick = () => {
       const text = textInput.value.trim();
       const time = timeInput.value || '';
-      if(!text){ alert('Digite a descrição.'); textInput.focus(); return; }
-      addTask(dayIndex, {id: uid(), time, text});
+      if (!text) {
+        alert('Digite a descrição.');
+        textInput.focus();
+        return;
+      }
+      addTask(dayIndex, { id: uid(), time, text });
       form.remove();
     };
     const cancel = document.createElement('button');
     cancel.textContent = 'Cancelar';
-    cancel.onclick = ()=> form.remove();
+    cancel.onclick = () => form.remove();
     form.appendChild(timeInput);
     form.appendChild(textInput);
     form.appendChild(ok);
@@ -112,28 +128,28 @@ let data = loadData();
     textInput.focus();
   }
 
-  function addTask(dayIndex, task){
+  function addTask(dayIndex, task) {
     data[dayIndex].push(task);
     saveData();
     render();
   }
 
-  function updateTaskText(dayIndex, id, newText){
+  function updateTaskText(dayIndex, id, newText) {
     const list = data[dayIndex];
-    const item = list.find(t=>t.id===id);
-    if(item){
+    const item = list.find(t => t.id === id);
+    if (item) {
       item.text = newText;
       saveData();
     }
   }
 
-  function editTime(dayIndex, id){
+  function editTime(dayIndex, id) {
     const list = data[dayIndex];
-    const item = list.find(t=>t.id===id);
-    if(!item) return;
+    const item = list.find(t => t.id === id);
+    if (!item) return;
     const newTime = prompt('Editar hora (HH:MM)', item.time || '');
-    if(newTime === null) return;
-    if(newTime && !/^\d{2}:\d{2}$/.test(newTime)){
+    if (newTime === null) return;
+    if (newTime && !/^\d{2}:\d{2}$/.test(newTime)) {
       alert('Formato inválido. Use HH:MM (por exemplo 14:30).');
       return;
     }
@@ -142,17 +158,22 @@ let data = loadData();
     render();
   }
 
-  function deleteTask(dayIndex, id){
-    data[dayIndex] = data[dayIndex].filter(t=>t.id!==id);
+  function deleteTask(dayIndex, id) {
+    data[dayIndex] = data[dayIndex].filter(t => t.id !== id);
     saveData();
     render();
   }
 
   render();
 
-  // Funções úteis para debug/uso avançado
   window.PLANNER = {
-    getData: ()=>JSON.parse(JSON.stringify(data)),
-    clearAll: ()=>{ if(confirm('Limpar todos os compromissos?')){ data = days.map(()=>[]); saveData(); render(); } }
+    getData: () => JSON.parse(JSON.stringify(data)),
+    clearAll: () => {
+      if (confirm('Limpar todos os compromissos?')) {
+        data = days.map(() => []);
+        saveData();
+        render();
+      }
+    }
   };
 })();
