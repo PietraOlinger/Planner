@@ -1,20 +1,195 @@
-:root{--card:#fff;--bg:#f4f6f8;--accent:#2b7ae4;--danger:#e04b4b;--muted:#6b7280}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; margin:0; padding:24px; background:var(--bg); color:#111}
-h1{margin:0 0 16px}
-.board{display:flex;gap:12px;flex-wrap:wrap}
-.day{background:var(--card);border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:12px;flex:1 1 220px;min-width:220px;}
-.day h2{margin:0 0 8px;font-size:16px;display:flex;justify-content:space-between;align-items:center}
-.day .list{list-style:none;padding:0;margin:0;min-height:60px}
-.task{display:flex;align-items:flex-start;gap:8px;padding:8px;border-radius:6px;background:#fbfdff;margin-bottom:8px;border:1px solid #eef3ff}
-.time{font-weight:600;color:var(--accent);width:64px;cursor:pointer}
-.text{flex:1;outline:none;min-height:18px}
-.actions{display:flex;gap:6px;margin-left:6px}
-button{background:transparent;border:0;cursor:pointer;padding:6px;border-radius:6px}
-.btn-add{background:var(--accent);color:#fff;padding:6px 8px;border-radius:6px;font-weight:600}
-.btn-del{color:var(--danger)}
-.muted{color:var(--muted);font-size:13px}
-.inline-form{display:flex;gap:6px;margin-top:8px}
-.inline-form input[type="time"]{padding:6px;border-radius:6px;border:1px solid #dfe7f6}
-.inline-form input[type="text"]{flex:1;padding:6px;border-radius:6px;border:1px solid #dfe7f6}
-.hidden{display:none}
-@media (max-width:800px){.board{flex-direction:column}}
+:root {
+  --card: #ffffff;
+  --bg: linear-gradient(135deg, #f4f7ff 0%, #eef4ff 100%);
+  --accent: #2b7ae4;
+  --accent-dark: #1e60b7;
+  --danger: #e04b4b;
+  --muted: #6b7280;
+  --border: #dfe7f6;
+  --shadow: 0 10px 24px rgba(43, 122, 228, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  padding: 24px;
+  background: var(--bg);
+  color: #111827;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #1f2937;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+.board {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.day {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 12px;
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.day h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #edf2ff;
+}
+
+.day .list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: start;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #f8fbff;
+  border: 1px solid #eef3ff;
+}
+
+.time {
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+  padding-top: 2px;
+}
+
+.text {
+  flex: 1;
+  outline: none;
+  min-height: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 2px;
+}
+
+button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-add {
+  background: var(--accent);
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.btn-add:hover {
+  background: var(--accent-dark);
+}
+
+.btn-del {
+  color: var(--danger);
+  padding: 4px 6px;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: 82px 1fr auto auto;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.inline-form input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.inline-form input[type="time"] {
+  min-width: 0;
+}
+
+.inline-form input[type="text"] {
+  min-width: 0;
+}
+
+.inline-form button {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 900px) {
+  .board {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 680px) {
+  body {
+    padding: 16px;
+  }
+
+  .day {
+    flex-basis: 100%;
+  }
+
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+
+  .task {
+    grid-template-columns: 56px 1fr auto;
+  }
+}
